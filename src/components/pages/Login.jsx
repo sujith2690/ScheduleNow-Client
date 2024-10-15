@@ -29,7 +29,7 @@ const Login = () => {
             setLoading(true)
             try {
                 console.log(values, '---------login values')
-                toast('Submitted')
+                toast.success('Login Success')
             } catch (error) {
                 console.log(error, 'Login failed');
             }
