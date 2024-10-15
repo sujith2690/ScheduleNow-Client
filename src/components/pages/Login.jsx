@@ -6,8 +6,11 @@ import { loginSchema } from '../../schemas/validationSchema';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
 import { logInApi } from '../../APIs/AuthApi';
+import { useDispatch } from 'react-redux';
+import { accessToken, userDetails } from '../../Redux/Features/userSlice';
 
 const Login = () => {
+    const dispatch = useDispatch()
     const [password, setPassword] = useState(false)
     const [change, setChange] = useState('password')
     const [Loading, setLoading] = useState(false)
@@ -30,6 +33,12 @@ const Login = () => {
             setLoading(true)
             try {
                 const { data } = await logInApi(values)
+                const userData = data.User
+                const token = data.Token
+                dispatch(userDetails(userData));
+                dispatch(accessToken(token));
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(userData));
                 toast.success(data.message)
             } catch (error) {
                 console.log(error, 'Login failed');
