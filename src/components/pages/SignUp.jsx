@@ -5,10 +5,11 @@ import { signUpSchema } from '../../schemas/validationSchema'
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
+import { signUpApi } from '../../APIs/AuthApi';
 
 const SignUp = () => {
     const [password, setPassword] = useState(false)
-    const [change, setChange] = useState('text')
+    const [change, setChange] = useState('password')
     const [Loading, setLoading] = useState(false)
 
     const handleShow = () => {
@@ -31,10 +32,10 @@ const SignUp = () => {
             setLoading(true)
             try {
                 setFormValues(values)
-                toast.success("SignUp Success")
+                const { data } = await signUpApi(values)
+                toast.success(data.message)
             } catch (error) {
                 toast.error(error.response.data.message)
-                console.log(error, 'SignUp failed');
             }
             action.resetForm();
             setLoading(false)

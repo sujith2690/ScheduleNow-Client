@@ -5,10 +5,11 @@ import { useFormik } from 'formik';
 import { loginSchema } from '../../schemas/validationSchema';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
+import { logInApi } from '../../APIs/AuthApi';
 
 const Login = () => {
     const [password, setPassword] = useState(false)
-    const [change, setChange] = useState('text')
+    const [change, setChange] = useState('password')
     const [Loading, setLoading] = useState(false)
 
     const handleShow = () => {
@@ -28,10 +29,11 @@ const Login = () => {
         onSubmit: async (values, action) => {
             setLoading(true)
             try {
-                console.log(values, '---------login values')
-                toast.success('Login Success')
+                const { data } = await logInApi(values)
+                toast.success(data.message)
             } catch (error) {
                 console.log(error, 'Login failed');
+                toast.error(error.response.data.message)
             }
             action.resetForm();
             console.log('before reset')
